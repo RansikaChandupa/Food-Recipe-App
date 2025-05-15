@@ -14,14 +14,14 @@ const recipeSchema = mongoose.Schema({
         required:true
     },
     time:{
-        type:String,
-        required:true
+        type:String
+        // required:true
     },
     coverImage:{
-        type:String,
-        required:true
+        type:String
+        // required:true
     },
 
 },{timestamps:true})
 
-module.exports = recipeSchema
+module.exports = mongoose.model("recipes", recipeSchema)
