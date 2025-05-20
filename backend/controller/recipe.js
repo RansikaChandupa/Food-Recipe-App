@@ -1,13 +1,14 @@
 const recipes = require("../models/recipe")
 
-const getRecipes = (req, res)=>{
-    // console.log("suceess or fail")
-    res.json({message:"Hello"})
+const getRecipes = async(req, res)=>{
+    const recipeItems = await recipes.find()
+    return res.status(200).json(recipeItems)
+    
 }
 
-const getRecipe = (req, res)=>{
-    // console.log("suceess or fail")
-    res.json({message:"Hello"})
+const getRecipe = async(req, res)=>{
+    const recipeItem = await recipes.findById(req.params.id)
+    return res.status(200).json(recipeItem)
 }
 
 const addRecipe = async(req, res)=>{
@@ -28,9 +29,19 @@ const addRecipe = async(req, res)=>{
     }
 }
 
-const editRecipe = (req, res)=>{
-    // console.log("suceess or fail")
-    res.json({message:"Hello"})
+const editRecipe = async(req, res)=>{
+    const {title, ingredients, instructions, time} = req.body
+    let recipe = await recipes.findById(req.params.id)
+    try{
+        if(recipe){
+            await recipes.findByIdAndUpdate(req.params.id, req.body, { new: true })
+            return res.status(201).json(title, ingredients, instructions, time)
+        }
+    }
+    catch(error){
+        console.error("Error updating recipe:", error.message)
+        return res.status(404).json({ message: "An error occurred while updating the recipe" })
+    }
 }
 
 const deleteRecipe = (req, res)=>{
